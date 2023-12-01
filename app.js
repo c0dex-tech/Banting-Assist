@@ -1,9 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const https = require('https');
 const app = express();
 const port = 80;
 
+
 const { getWashroomData, enterVote } = require('./database');
+
+const options = {
+  cert: fs.readFileSync('/etc/letsencrypt/live/domain-or-subdomain.in/fullchain.pem'),
+  key: fs.readFileSync('/etc/letsencrypt/live/domain-or-subdomain.in/privkey.pem')
+};
+
+https.createServer(options, app).listen(443);
 
 app.get('/', (req, res) => {
     res.render("index.ejs")
